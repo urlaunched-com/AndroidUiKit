@@ -14,12 +14,12 @@ suspend fun <T : Any> ViewModel.performUseCase(
     val useCaseParams = getUseCaseParams(useCase)
     when (val response = useCase()) {
         is Response.Success -> {
-            logFireBaseMessage(params = useCaseParams, responseData = response.data.toString(), isSuccess = true)
+            logFirebaseMessage(params = useCaseParams, responseData = response.data.toString(), isSuccess = true)
             success(response.data)
         }
 
         is Response.Error -> {
-            logFireBaseMessage(params = useCaseParams, responseData = response.error.toString(), isSuccess = false)
+            logFirebaseMessage(params = useCaseParams, responseData = response.error.toString(), isSuccess = false)
             error(response.error)
         }
     }
@@ -45,7 +45,7 @@ private fun <T : Any> getUseCaseParams(useCase: T): String {
         }
 }
 
-private fun logFireBaseMessage(params: String, responseData: String, isSuccess: Boolean) {
+private fun logFirebaseMessage(params: String, responseData: String, isSuccess: Boolean) {
     val data = if (isSuccess) {
         SUCCESS_MESSAGE.format(responseData)
     } else {
@@ -57,4 +57,4 @@ private fun logFireBaseMessage(params: String, responseData: String, isSuccess: 
 
 const val FIREBASE_MESSAGE = "performUseCase(%s) %s"
 const val SUCCESS_MESSAGE = "Success: %s"
-const val ERROR_MESSAGE = "Error %s"
+const val ERROR_MESSAGE = "Error: %s"

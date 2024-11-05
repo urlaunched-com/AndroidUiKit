@@ -12,7 +12,7 @@ import com.google.firebase.perf.application.FrameMetricsRecorder
 import com.urlaunched.android.common.lifecycle.HandleLifecycleEvents
 
 @Composable
-internal fun LogFirebasePerformance(route: String) {
+internal fun LogScreenEvents(route: String) {
     val routeName = route.split("/").first()
     val activity = LocalContext.current as Activity
 

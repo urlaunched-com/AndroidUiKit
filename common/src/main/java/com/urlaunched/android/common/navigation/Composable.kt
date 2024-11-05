@@ -15,7 +15,7 @@ fun NavGraphBuilder.composable(
         route = route,
         arguments = arguments.orEmpty()
     ) { backStackEntry ->
-        LogFirebasePerformance(route = route)
+        LogScreenEvents(route = route)
 
         content(backStackEntry)
     }
