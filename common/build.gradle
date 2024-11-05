@@ -35,6 +35,7 @@ android {
 
     kotlinOptions {
         jvmTarget = '17'
+        javaParameters = true
     }
 
     buildFeatures {
@@ -80,6 +81,7 @@ dependencies {
     // Firebase
     implementation platform(libs.firebaseDependencies.bom)
     implementation libs.firebaseDependencies.performance
+    implementation libs.firebaseDependencies.crashlytics
 
     // Paging
     implementation libs.pagingDependencies.core
@@ -104,4 +106,7 @@ dependencies {
 
     // Accompanist
     implementation libs.composeAccompanist.navigation
+
+    // Kotlin reflect
+    implementation libs.kotlin.reflect
 }

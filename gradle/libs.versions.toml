@@ -7,6 +7,7 @@ androidLifecycleVersion = "2.8.6"
 # kotlinDependencies
 kotlinCore = "2.0.20"
 coroutinesVersion = "1.9.0"
+kotlinReflectVersion = "2.0.20"
 kotlinSerializationVersion = "1.7.3"
 
 # composeDependencies
@@ -93,6 +94,7 @@ androidCoreDependencies-appcompat = { module = "androidx.appcompat:appcompat", v
 androidCoreDependencies-core = { module = "androidx.core:core-ktx", version.ref = "androidxCoreVersion" }
 androidCoreDependencies-lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidLifecycleVersion" }
 
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinReflectVersion" }
 kotlinDependencies-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlinCore" }
 kotlinDependencies-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutinesVersion" }
 kotlinDependencies-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerializationVersion" }
