@@ -4,13 +4,27 @@ import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.perf.FirebasePerformance
 import com.google.firebase.perf.application.FrameMetricsRecorder
+import com.urlaunched.android.common.lifecycle.HandleLifecycleEvents
 
 @Composable
 internal fun LogFirebasePerformance(route: String) {
     val routeName = route.split("/").first()
     val activity = LocalContext.current as Activity
+
+    HandleLifecycleEvents(
+        lifecycleOwner = LocalLifecycleOwner.current,
+        onStart = {
+            Firebase.crashlytics.log(ON_START.format(route))
+        },
+        onStop = {
+            Firebase.crashlytics.log(ON_STOP.format(route))
+        }
+    )
 
     DisposableEffect(route) {
         val trace = FirebasePerformance.getInstance().newTrace(routeName).apply { start() }
@@ -34,3 +48,5 @@ internal fun LogFirebasePerformance(route: String) {
 const val FROZEN_FRAMES_TAG = "frozen_frames"
 const val SLOW_FRAMES_TAG = "slow_frames"
 const val TOTAL_FRAMES_TAG = "total_frames"
+const val ON_START = "Screen %s Started"
+const val ON_STOP = "Screen %s Stopped"
