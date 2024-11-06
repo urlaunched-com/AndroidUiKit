@@ -3,8 +3,11 @@ package com.urlaunched.android.common.viewmodel
 import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
+import com.urlaunched.android.common.logger.NotLoggable
 import com.urlaunched.android.common.response.ErrorData
 import com.urlaunched.android.common.response.Response
+import kotlin.reflect.full.declaredFunctions
+import kotlin.reflect.full.findAnnotation
 
 suspend fun <T : Any> ViewModel.performUseCase(
     useCase: suspend () -> Response<T>,
@@ -12,14 +15,28 @@ suspend fun <T : Any> ViewModel.performUseCase(
     error: suspend (error: ErrorData) -> Unit
 ) {
     val useCaseParams = getUseCaseParams(useCase)
+    val isUseCaseLoggable = isUseCaseLoggable(useCase, this)
+
     when (val response = useCase()) {
         is Response.Success -> {
-            logFirebaseMessage(params = useCaseParams, responseData = response.data.toString(), isSuccess = true)
+            logFirebaseMessage(
+                params = useCaseParams,
+                responseData = response.data,
+                isSuccess = true,
+                isUseCaseLoggable = isUseCaseLoggable
+            )
+
             success(response.data)
         }
 
         is Response.Error -> {
-            logFirebaseMessage(params = useCaseParams, responseData = response.error.toString(), isSuccess = false)
+            logFirebaseMessage(
+                params = useCaseParams,
+                responseData = response.error.toString(),
+                isSuccess = false,
+                isUseCaseLoggable = isUseCaseLoggable
+            )
+
             error(response.error)
         }
     }
@@ -45,16 +62,39 @@ private fun <T : Any> getUseCaseParams(useCase: T): String {
         }
 }
 
-private fun logFirebaseMessage(params: String, responseData: String, isSuccess: Boolean) {
-    val data = if (isSuccess) {
-        SUCCESS_MESSAGE.format(responseData)
-    } else {
-        ERROR_MESSAGE.format(responseData)
-    }
+private fun <T : Any, R : Any> isUseCaseLoggable(useCase: T, viewModel: R): Boolean {
+    val currentMethodName = useCase::class.java.declaredFields.first().toString()
+    val startIndex = currentMethodName.indexOf('$') + 1
+    val endIndex = currentMethodName.indexOf('$', startIndex)
 
-    Firebase.crashlytics.log(FIREBASE_MESSAGE.format(params, data))
+    val currentMethodNameFormated = currentMethodName.substring(startIndex, endIndex)
+    val viewModelMethods = viewModel::class.declaredFunctions
+
+    val currentMethod = viewModelMethods.first { it.name == currentMethodNameFormated }
+
+    return currentMethod.findAnnotation<NotLoggable>() == null
+}
+
+private fun logFirebaseMessage(params: String, responseData: Any, isSuccess: Boolean, isUseCaseLoggable: Boolean) {
+    if (isUseCaseLoggable) {
+        val data = if (isSuccess) {
+            when {
+                responseData is Unit -> SUCCESS_MESSAGE.format(UNIT)
+                (responseData as? List<*>)?.isEmpty() == true -> SUCCESS_MESSAGE.format(EMPTY_LIST)
+                else -> SUCCESS_MESSAGE.format(responseData.toString())
+            }
+        } else {
+            ERROR_MESSAGE.format(responseData)
+        }
+
+        val fireBaseMessage = FIREBASE_MESSAGE.format(params, data)
+
+        Firebase.crashlytics.log(fireBaseMessage)
+    }
 }
 
 const val FIREBASE_MESSAGE = "performUseCase(%s) %s"
 const val SUCCESS_MESSAGE = "Success: %s"
 const val ERROR_MESSAGE = "Error: %s"
+const val UNIT = "Unit"
+const val EMPTY_LIST = "Empty list"

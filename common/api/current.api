@@ -182,6 +182,13 @@ package com.urlaunched.android.common.lifecycle {
 
 }
 
+package com.urlaunched.android.common.logger {
+
+  @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention.RUNTIME) @kotlin.annotation.Target(allowedTargets=kotlin.annotation.AnnotationTarget.FUNCTION) public @interface NotLoggable {
+  }
+
+}
+
 package com.urlaunched.android.common.navigation {
 
   public final class BottomSheetKt {
@@ -422,9 +429,11 @@ package com.urlaunched.android.common.viewmodel {
   public final class ViewModelExtensionsKt {
     method public static inline void loadingTask(androidx.lifecycle.ViewModel, kotlin.jvm.functions.Function1<? super java.lang.Boolean,kotlin.Unit> setLoading, kotlin.jvm.functions.Function0<kotlin.Unit> block);
     method public static suspend <T> Object? performUseCase(androidx.lifecycle.ViewModel, kotlin.jvm.functions.Function1<? super kotlin.coroutines.Continuation<? super com.urlaunched.android.common.response.Response<T>>,?> useCase, kotlin.jvm.functions.Function2<? super T,? super kotlin.coroutines.Continuation<? super kotlin.Unit>,?> success, kotlin.jvm.functions.Function2<? super com.urlaunched.android.common.response.ErrorData,? super kotlin.coroutines.Continuation<? super kotlin.Unit>,?> error, kotlin.coroutines.Continuation<? super kotlin.Unit>);
+    field public static final String EMPTY_LIST = "Empty list";
     field public static final String ERROR_MESSAGE = "Error: %s";
     field public static final String FIREBASE_MESSAGE = "performUseCase(%s) %s";
     field public static final String SUCCESS_MESSAGE = "Success: %s";
+    field public static final String UNIT = "Unit";
   }
 
 }
