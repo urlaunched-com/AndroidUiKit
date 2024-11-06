@@ -1,5 +1,6 @@
 package com.urlaunched.android.common.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
@@ -15,7 +16,7 @@ suspend fun <T : Any> ViewModel.performUseCase(
     error: suspend (error: ErrorData) -> Unit
 ) {
     val useCaseParams = getUseCaseParams(useCase)
-    val isUseCaseLoggable = isUseCaseLoggable(useCase, this)
+    val isUseCaseLoggable = true
 
     when (val response = useCase()) {
         is Response.Success -> {
@@ -51,29 +52,29 @@ inline fun ViewModel.loadingTask(setLoading: (isLoading: Boolean) -> Unit, block
     }
 }
 
-private fun <T : Any> getUseCaseParams(useCase: T): String {
+private fun <T : Any> getUseCaseParams(useCase: suspend () -> Response<T>): String {
     val useCaseClass = useCase::class.java
     return useCaseClass.declaredFields
         .filterNot { it.name in setOf("label", "this$0") }
         .joinToString { field ->
             field.isAccessible = true
             val value = field.get(useCase)
-            "${field.name.removePrefix("$")} = $value"
+            "${field.name.removePrefix("$")} = ${value?.toString()}"
         }
 }
 
-private fun <T : Any, R : Any> isUseCaseLoggable(useCase: T, viewModel: R): Boolean {
-    val currentMethodName = useCase::class.java.declaredFields.first().toString()
-    val startIndex = currentMethodName.indexOf('$') + 1
-    val endIndex = currentMethodName.indexOf('$', startIndex)
-
-    val currentMethodNameFormated = currentMethodName.substring(startIndex, endIndex)
-    val viewModelMethods = viewModel::class.declaredFunctions
-
-    val currentMethod = viewModelMethods.first { it.name == currentMethodNameFormated }
-
-    return currentMethod.findAnnotation<NotLoggable>() == null
-}
+//private fun <T : Any, R : Any> isUseCaseLoggable(useCase: T, viewModel: R): Boolean {
+//    val currentMethodName = useCase::class.java.declaredFields.first().toString()
+//    val startIndex = currentMethodName.indexOf('$') + 1
+//    val endIndex = currentMethodName.indexOf('$', startIndex)
+//
+//    val currentMethodNameFormated = currentMethodName.substring(startIndex, endIndex)
+//    val viewModelMethods = viewModel::class.declaredFunctions
+//
+//    val currentMethod = viewModelMethods.first { it.name == currentMethodNameFormated }
+//
+//    return currentMethod.findAnnotation<NotLoggable>() == null
+//}
 
 private fun logFirebaseMessage(params: String, responseData: Any, isSuccess: Boolean, isUseCaseLoggable: Boolean) {
     if (isUseCaseLoggable) {
@@ -89,6 +90,7 @@ private fun logFirebaseMessage(params: String, responseData: Any, isSuccess: Boo
 
         val fireBaseMessage = FIREBASE_MESSAGE.format(params, data)
 
+        Log.d("TESTT", "$fireBaseMessage ")
         Firebase.crashlytics.log(fireBaseMessage)
     }
 }

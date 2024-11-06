@@ -1,6 +1,7 @@
 package com.urlaunched.android.common.navigation
 
 import android.app.Activity
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
@@ -19,9 +20,11 @@ internal fun LogScreenEvents(route: String) {
     HandleLifecycleEvents(
         lifecycleOwner = LocalLifecycleOwner.current,
         onStart = {
+            Log.d("TESTT", "LogScreenEvents: ${ON_START.format(route)} ")
             Firebase.crashlytics.log(ON_START.format(route))
         },
         onStop = {
+            Log.d("TESTT", "LogScreenEvents: ${ON_STOP.format(route)} ")
             Firebase.crashlytics.log(ON_STOP.format(route))
         }
     )
