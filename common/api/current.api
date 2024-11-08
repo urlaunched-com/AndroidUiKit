@@ -182,13 +182,6 @@ package com.urlaunched.android.common.lifecycle {
 
 }
 
-package com.urlaunched.android.common.logger {
-
-  @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention.RUNTIME) @kotlin.annotation.Target(allowedTargets=kotlin.annotation.AnnotationTarget.FUNCTION) public @interface NotLoggable {
-  }
-
-}
-
 package com.urlaunched.android.common.navigation {
 
   public final class BottomSheetKt {

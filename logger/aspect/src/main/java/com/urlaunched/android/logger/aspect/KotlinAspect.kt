@@ -41,7 +41,7 @@ class KotlinAspect {
         Firebase.crashlytics.log(methodWithParams)
     }
 
-    @Around("execution(public * *..*UseCase.*(..)) && !@annotation(com.urlaunched.android.common.logger.NotLoggable)")
+    @Around("execution(public * *..*UseCase.*(..)) && !@annotation(com.urlaunched.android.logger.annotations.NotLoggable)")
     fun invokeUseCase(joinPoint: ProceedingJoinPoint?): Any? {
         val methodName = joinPoint?.signature?.name
         val args = joinPoint?.args
