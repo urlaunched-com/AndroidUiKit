@@ -256,6 +256,17 @@ package com.urlaunched.android.common.pagination {
     method public static <T> androidx.paging.PagingData<T> filterUnique(androidx.paging.PagingData<T>, kotlin.jvm.functions.Function1<? super T,?> comparisonField);
   }
 
+  public final class PagingFlowWithMeta<T, R> {
+    ctor public PagingFlowWithMeta(kotlinx.coroutines.flow.Flow<androidx.paging.PagingData<T>> pagingFlow, R? meta);
+    method public kotlinx.coroutines.flow.Flow<androidx.paging.PagingData<T>> component1();
+    method public R? component2();
+    method public com.urlaunched.android.common.pagination.PagingFlowWithMeta<T,R> copy(kotlinx.coroutines.flow.Flow<androidx.paging.PagingData<T>> pagingFlow, R? meta);
+    method public R? getMeta();
+    method public kotlinx.coroutines.flow.Flow<androidx.paging.PagingData<T>> getPagingFlow();
+    property public final R? meta;
+    property public final kotlinx.coroutines.flow.Flow<androidx.paging.PagingData<T>> pagingFlow;
+  }
+
   public final class RemotePagingSource<T> extends androidx.paging.PagingSource<java.lang.Integer,T> {
     method public Integer? getRefreshKey(androidx.paging.PagingState<java.lang.Integer,T> state);
     method public suspend Object? load(androidx.paging.PagingSource.LoadParams<java.lang.Integer> params, kotlin.coroutines.Continuation<? super androidx.paging.PagingSource.LoadResult<java.lang.Integer,T>>);
