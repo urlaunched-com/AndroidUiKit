@@ -1,7 +1,6 @@
 package com.urlaunched.android.common.navigation
 
 import android.app.Activity
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
