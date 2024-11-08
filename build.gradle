@@ -9,6 +9,7 @@ buildscript {
 
     dependencies {
         classpath libs.plugins.firebase.performance.get().toString()
+        classpath libs.plugins.aspect.get().toString()
     }
 }
 

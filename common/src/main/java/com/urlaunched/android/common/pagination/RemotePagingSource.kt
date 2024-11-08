@@ -2,6 +2,8 @@ package com.urlaunched.android.common.pagination
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import com.urlaunched.android.common.response.ErrorData
 import com.urlaunched.android.common.response.Response
 
@@ -25,6 +27,10 @@ class RemotePagingSource<T : Any> internal constructor(
             },
             success = { list ->
                 val isEndOfPagination = list.size < params.loadSize
+
+                if (list.isNotEmpty()) {
+                    Firebase.crashlytics.log("page: $page ${list.map { it.toString() }}")
+                }
 
                 LoadResult.Page(
                     data = list,
