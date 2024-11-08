@@ -1,43 +1,22 @@
 package com.urlaunched.android.common.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
-import com.urlaunched.android.common.logger.NotLoggable
 import com.urlaunched.android.common.response.ErrorData
 import com.urlaunched.android.common.response.Response
-import kotlin.reflect.full.declaredFunctions
-import kotlin.reflect.full.findAnnotation
 
 suspend fun <T : Any> ViewModel.performUseCase(
     useCase: suspend () -> Response<T>,
     success: suspend (data: T) -> Unit,
     error: suspend (error: ErrorData) -> Unit
 ) {
-    val useCaseParams = getUseCaseParams(useCase)
-    val isUseCaseLoggable = true
-
     when (val response = useCase()) {
         is Response.Success -> {
-            logFirebaseMessage(
-                params = useCaseParams,
-                responseData = response.data,
-                isSuccess = true,
-                isUseCaseLoggable = isUseCaseLoggable
-            )
-
             success(response.data)
         }
 
         is Response.Error -> {
-            logFirebaseMessage(
-                params = useCaseParams,
-                responseData = response.error.toString(),
-                isSuccess = false,
-                isUseCaseLoggable = isUseCaseLoggable
-            )
-
             error(response.error)
         }
     }
@@ -63,19 +42,6 @@ private fun <T : Any> getUseCaseParams(useCase: suspend () -> Response<T>): Stri
         }
 }
 
-//private fun <T : Any, R : Any> isUseCaseLoggable(useCase: T, viewModel: R): Boolean {
-//    val currentMethodName = useCase::class.java.declaredFields.first().toString()
-//    val startIndex = currentMethodName.indexOf('$') + 1
-//    val endIndex = currentMethodName.indexOf('$', startIndex)
-//
-//    val currentMethodNameFormated = currentMethodName.substring(startIndex, endIndex)
-//    val viewModelMethods = viewModel::class.declaredFunctions
-//
-//    val currentMethod = viewModelMethods.first { it.name == currentMethodNameFormated }
-//
-//    return currentMethod.findAnnotation<NotLoggable>() == null
-//}
-
 private fun logFirebaseMessage(params: String, responseData: Any, isSuccess: Boolean, isUseCaseLoggable: Boolean) {
     if (isUseCaseLoggable) {
         val data = if (isSuccess) {
@@ -90,7 +56,6 @@ private fun logFirebaseMessage(params: String, responseData: Any, isSuccess: Boo
 
         val fireBaseMessage = FIREBASE_MESSAGE.format(params, data)
 
-        Log.d("TESTT", "$fireBaseMessage ")
         Firebase.crashlytics.log(fireBaseMessage)
     }
 }

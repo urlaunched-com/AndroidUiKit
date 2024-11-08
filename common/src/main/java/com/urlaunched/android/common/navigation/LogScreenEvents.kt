@@ -20,11 +20,9 @@ internal fun LogScreenEvents(route: String) {
     HandleLifecycleEvents(
         lifecycleOwner = LocalLifecycleOwner.current,
         onStart = {
-            Log.d("TESTT", "LogScreenEvents: ${ON_START.format(route)} ")
             Firebase.crashlytics.log(ON_START.format(route))
         },
         onStop = {
-            Log.d("TESTT", "LogScreenEvents: ${ON_STOP.format(route)} ")
             Firebase.crashlytics.log(ON_STOP.format(route))
         }
     )
