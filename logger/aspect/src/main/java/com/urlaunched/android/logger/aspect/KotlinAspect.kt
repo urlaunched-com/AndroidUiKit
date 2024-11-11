@@ -25,8 +25,7 @@ class KotlinAspect {
                 "!execution(* *..*ViewModel.getSideEffect(..)) && " +
                 "!execution(* *..*ViewModel.*showSnackbar*(..)) && " +
                 "!execution(* *..*ViewModel.*showSnackBar*(..)) && " +
-                "!execution(* *..*ViewModel.*onPassword*(..)) && " +
-                "!@annotation(com.urlaunched.android.common.logger.NotLoggable)"
+                "!execution(* *..*ViewModel.*onPassword*(..)) && !@annotation(com.urlaunched.android.logger.annotations.NotLoggable)"
     )
     fun log(joinPoint: JoinPoint?) {
         val methodName = joinPoint?.signature?.name

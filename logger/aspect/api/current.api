@@ -4,7 +4,7 @@ package com.urlaunched.android.logger.aspect {
   @org.aspectj.lang.annotation.Aspect public final class KotlinAspect {
     ctor public KotlinAspect();
     method @org.aspectj.lang.annotation.Around("execution(public * *..*UseCase.*(..)) && !@annotation(com.urlaunched.android.logger.annotations.NotLoggable)") public Object? invokeUseCase(org.aspectj.lang.ProceedingJoinPoint? joinPoint);
-    method @org.aspectj.lang.annotation.Before("execution(public * *..*ViewModel.*(..)) && " + "!execution(* *..*ViewModel.access$*(..)) && " + "!execution(* *..*ViewModel.getUiState(..)) && " + "!execution(* *..*ViewModel.getSideEffect(..)) && " + "!execution(* *..*ViewModel.*showSnackbar*(..)) && " + "!execution(* *..*ViewModel.*showSnackBar*(..)) && " + "!execution(* *..*ViewModel.*onPassword*(..)) && " + "!@annotation(com.urlaunched.android.common.logger.NotLoggable)") public void log(org.aspectj.lang.JoinPoint? joinPoint);
+    method @org.aspectj.lang.annotation.Before("execution(public * *..*ViewModel.*(..)) && " + "!execution(* *..*ViewModel.access$*(..)) && " + "!execution(* *..*ViewModel.getUiState(..)) && " + "!execution(* *..*ViewModel.getSideEffect(..)) && " + "!execution(* *..*ViewModel.*showSnackbar*(..)) && " + "!execution(* *..*ViewModel.*showSnackBar*(..)) && " + "!execution(* *..*ViewModel.*onPassword*(..)) && !@annotation(com.urlaunched.android.logger.annotations.NotLoggable)") public void log(org.aspectj.lang.JoinPoint? joinPoint);
   }
 
   public final class KotlinAspectKt {
