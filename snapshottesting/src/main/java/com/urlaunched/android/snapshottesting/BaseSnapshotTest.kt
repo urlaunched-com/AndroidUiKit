@@ -8,6 +8,7 @@ import app.cash.paparazzi.Paparazzi
 import app.cash.paparazzi.detectEnvironment
 import com.android.ide.common.rendering.api.SessionParams
 import com.android.resources.NightMode
+import com.android.resources.ScreenOrientation
 import com.urlaunched.android.design.ui.paging.LocalPagingMode
 import com.urlaunched.android.design.ui.paging.LocalPagingModeEnum
 import org.junit.Rule
@@ -15,7 +16,9 @@ import java.util.Locale
 
 abstract class BaseSnapshotTest(
     renderingMode: SessionParams.RenderingMode = SessionParams.RenderingMode.NORMAL,
-    private val supportsDarkMode: Boolean = false
+    private val supportsDarkMode: Boolean = false,
+    private val deviceConfig: DeviceConfig = DeviceConfig.PIXEL_5,
+    private val supportsLandscape: Boolean = false
 ) {
     init {
         Locale.setDefault(Locale.ENGLISH)
@@ -24,7 +27,7 @@ abstract class BaseSnapshotTest(
     @get:Rule
     open val paparazzi =
         Paparazzi(
-            deviceConfig = DeviceConfig.PIXEL_5,
+            deviceConfig = deviceConfig,
             renderingMode = renderingMode,
             showSystemUi = false,
             maxPercentDifference = 0.1,
@@ -35,7 +38,7 @@ abstract class BaseSnapshotTest(
 
     fun snapshot(pagingMode: LocalPagingModeEnum? = null, composable: @Composable () -> Unit) {
         paparazzi.unsafeUpdateConfig(
-            deviceConfig = DeviceConfig.PIXEL_5.copy(
+            deviceConfig = deviceConfig.copy(
                 nightMode = NightMode.NOTNIGHT
             )
         )
@@ -51,12 +54,31 @@ abstract class BaseSnapshotTest(
 
         if (supportsDarkMode) {
             paparazzi.unsafeUpdateConfig(
-                deviceConfig = DeviceConfig.PIXEL_5.copy(
+                deviceConfig = deviceConfig.copy(
                     nightMode = NightMode.NIGHT
                 )
             )
 
             paparazzi.snapshot("dark") {
+                CompositionLocalProvider(
+                    LocalInspectionMode provides true,
+                    LocalPagingMode provides pagingMode
+                ) {
+                    composable()
+                }
+            }
+        }
+
+        if (supportsLandscape) {
+            paparazzi.unsafeUpdateConfig(
+                deviceConfig = deviceConfig.copy(
+                    orientation = ScreenOrientation.LANDSCAPE,
+                    screenHeight = deviceConfig.screenWidth,
+                    screenWidth = deviceConfig.screenHeight
+                )
+            )
+
+            paparazzi.snapshot("landscape") {
                 CompositionLocalProvider(
                     LocalInspectionMode provides true,
                     LocalPagingMode provides pagingMode
