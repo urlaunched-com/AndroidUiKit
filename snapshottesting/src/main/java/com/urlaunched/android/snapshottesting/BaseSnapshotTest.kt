@@ -15,9 +15,9 @@ import org.junit.Rule
 import java.util.Locale
 
 abstract class BaseSnapshotTest(
+    private val deviceConfig: DeviceConfig = DeviceConfig.PIXEL_5,
     renderingMode: SessionParams.RenderingMode = SessionParams.RenderingMode.NORMAL,
     private val supportsDarkMode: Boolean = false,
-    private val deviceConfig: DeviceConfig = DeviceConfig.PIXEL_5,
     private val supportsLandscape: Boolean = false
 ) {
     init {
@@ -37,13 +37,50 @@ abstract class BaseSnapshotTest(
         )
 
     fun snapshot(pagingMode: LocalPagingModeEnum? = null, composable: @Composable () -> Unit) {
-        paparazzi.unsafeUpdateConfig(
-            deviceConfig = deviceConfig.copy(
-                nightMode = NightMode.NOTNIGHT
-            )
-        )
+        when {
+            supportsDarkMode && supportsLandscape -> {
+                lightPortraitConfig()
+                paparazziSnapshot("light", pagingMode, composable)
 
-        paparazzi.snapshot("light") {
+                lightLandscapeConfig()
+                paparazziSnapshot("light_landscape", pagingMode, composable)
+
+                darkPortraitConfig()
+                paparazziSnapshot("dark", pagingMode, composable)
+
+                darkLandscapeConfig()
+                paparazziSnapshot("dark_landscape", pagingMode, composable)
+            }
+
+            supportsDarkMode && !supportsLandscape -> {
+                lightPortraitConfig()
+                paparazziSnapshot("light", pagingMode, composable)
+
+                darkPortraitConfig()
+                paparazziSnapshot("dark", pagingMode, composable)
+            }
+
+            !supportsDarkMode && supportsLandscape -> {
+                lightPortraitConfig()
+                paparazziSnapshot("light", pagingMode, composable)
+
+                lightLandscapeConfig()
+                paparazziSnapshot("light_landscape", pagingMode, composable)
+            }
+
+            else -> {
+                lightPortraitConfig()
+                paparazziSnapshot("light", pagingMode, composable)
+            }
+        }
+    }
+
+    private fun paparazziSnapshot(
+        name: String,
+        pagingMode: LocalPagingModeEnum? = null,
+        composable: @Composable () -> Unit
+    ) {
+        paparazzi.snapshot(name) {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,
                 LocalPagingMode provides pagingMode
@@ -51,41 +88,43 @@ abstract class BaseSnapshotTest(
                 composable()
             }
         }
+    }
 
-        if (supportsDarkMode) {
-            paparazzi.unsafeUpdateConfig(
-                deviceConfig = deviceConfig.copy(
-                    nightMode = NightMode.NIGHT
-                )
+    private val lightPortraitConfig = {
+        paparazzi.unsafeUpdateConfig(
+            deviceConfig = deviceConfig.copy(
+                nightMode = NightMode.NOTNIGHT
             )
+        )
+    }
 
-            paparazzi.snapshot("dark") {
-                CompositionLocalProvider(
-                    LocalInspectionMode provides true,
-                    LocalPagingMode provides pagingMode
-                ) {
-                    composable()
-                }
-            }
-        }
-
-        if (supportsLandscape) {
-            paparazzi.unsafeUpdateConfig(
-                deviceConfig = deviceConfig.copy(
-                    orientation = ScreenOrientation.LANDSCAPE,
-                    screenHeight = deviceConfig.screenWidth,
-                    screenWidth = deviceConfig.screenHeight
-                )
+    private val lightLandscapeConfig = {
+        paparazzi.unsafeUpdateConfig(
+            deviceConfig = deviceConfig.copy(
+                orientation = ScreenOrientation.LANDSCAPE,
+                screenHeight = deviceConfig.screenWidth,
+                screenWidth = deviceConfig.screenHeight,
+                nightMode = NightMode.NOTNIGHT
             )
+        )
+    }
 
-            paparazzi.snapshot("landscape") {
-                CompositionLocalProvider(
-                    LocalInspectionMode provides true,
-                    LocalPagingMode provides pagingMode
-                ) {
-                    composable()
-                }
-            }
-        }
+    private val darkPortraitConfig = {
+        paparazzi.unsafeUpdateConfig(
+            deviceConfig = deviceConfig.copy(
+                nightMode = NightMode.NIGHT
+            )
+        )
+    }
+
+    private val darkLandscapeConfig = {
+        paparazzi.unsafeUpdateConfig(
+            deviceConfig = deviceConfig.copy(
+                orientation = ScreenOrientation.LANDSCAPE,
+                screenHeight = deviceConfig.screenWidth,
+                screenWidth = deviceConfig.screenHeight,
+                nightMode = NightMode.NIGHT
+            )
+        )
     }
 }
