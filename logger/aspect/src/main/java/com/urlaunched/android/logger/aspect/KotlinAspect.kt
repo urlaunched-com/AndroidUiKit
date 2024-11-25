@@ -111,8 +111,6 @@ class KotlinAspect {
                             result.first()?.let { data ->
                                 if (data is PagingData<*>) {
                                     Firebase.crashlytics.log(methodWithParams)
-                                } else {
-                                    Firebase.crashlytics.log("$methodWithParams $data")
                                 }
                             }
                         } finally {
@@ -128,8 +126,6 @@ class KotlinAspect {
                 is PagingFlowWithMeta<*, *> -> {
                     Firebase.crashlytics.log(methodWithParams)
                 }
-
-                else -> Firebase.crashlytics.log("$methodWithParams ${result?.toString()}")
             }
 
             return result
