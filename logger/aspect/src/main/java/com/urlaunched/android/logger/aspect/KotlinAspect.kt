@@ -1,14 +1,12 @@
 package com.urlaunched.android.logger.aspect
 
+import android.util.Log
 import androidx.paging.PagingData
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import com.urlaunched.android.common.pagination.PagingFlowWithMeta
 import com.urlaunched.android.common.response.Response
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
@@ -20,12 +18,12 @@ import kotlin.coroutines.Continuation
 class KotlinAspect {
     @Before(
         "execution(public * *..*ViewModel.*(..)) && " +
-                "!execution(* *..*ViewModel.access$*(..)) && " +
-                "!execution(* *..*ViewModel.getUiState(..)) && " +
-                "!execution(* *..*ViewModel.getSideEffect(..)) && " +
-                "!execution(* *..*ViewModel.*showSnackbar*(..)) && " +
-                "!execution(* *..*ViewModel.*showSnackBar*(..)) && " +
-                "!execution(* *..*ViewModel.*onPassword*(..)) && !@annotation(com.urlaunched.android.logger.annotations.NotLoggable)"
+            "!execution(* *..*ViewModel.access$*(..)) && " +
+            "!execution(* *..*ViewModel.getUiState(..)) && " +
+            "!execution(* *..*ViewModel.getSideEffect(..)) && " +
+            "!execution(* *..*ViewModel.*showSnackbar*(..)) && " +
+            "!execution(* *..*ViewModel.*showSnackBar*(..)) && " +
+            "!execution(* *..*ViewModel.*onPassword*(..)) && !@annotation(com.urlaunched.android.logger.annotations.NotLoggable)"
     )
     fun log(joinPoint: JoinPoint?) {
         val methodName = joinPoint?.signature?.name
@@ -99,14 +97,11 @@ class KotlinAspect {
         } else {
             val result = joinPoint?.proceed(args)
 
-            if (result is Flow<*>) {
-                runBlocking(Dispatchers.IO) {
-                    result.first()?.let { data ->
-                        if (data is PagingData<*>) {
-                            Firebase.crashlytics.log(methodWithParams)
-                        }
-                    }
-                }
+            try {
+                val res = result as Flow<PagingData<*>>
+                Log.d("TESTT", "invokeUseCase: $res")
+            } catch (e: Exception) {
+                Log.d("TESTT", "CATCH!: ")
             }
 
             if (result is PagingFlowWithMeta<*, *>) {
