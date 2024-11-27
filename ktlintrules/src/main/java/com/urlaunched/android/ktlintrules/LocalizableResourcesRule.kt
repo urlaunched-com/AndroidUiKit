@@ -21,7 +21,9 @@ class LocalizableResourcesRule :
             val importStatements = node.text.split("\n").filter { it.isNotBlank() }
 
             importStatements.forEach { import ->
-                if (import.contains(LOCALIZATION_IMPORT) && !import.contains(CORRECT_CAST)) {
+                if ((import.contains(LOCALIZATION_IMPORT) || import.contains(LOCALIZABLE_CAST)) &&
+                    !import.contains(CORRECT_IMPORT)
+                ) {
                     emit(
                         node.startOffset,
                         ERROR_MESSAGE,
@@ -35,8 +37,9 @@ class LocalizableResourcesRule :
     companion object {
         private const val CUSTOM_RULE_ID = "ktlintrules:localizableresourses"
         private const val LOCALIZATION_IMPORT = "core.localization.R"
-        private const val CORRECT_CAST = "as LocalizableResources"
+        private const val LOCALIZABLE_CAST = "as LocalizableResources"
+        private const val CORRECT_IMPORT = "core.localization.LocalizableResources"
         private const val ERROR_MESSAGE =
-            "The import for localization R must be aliased as LocalizableResources. Example: import ...core.localization.R as LocalizableResources"
+            "The import for localization resources must be import ...core.localization.LocalizableResources"
     }
 }
