@@ -1,10 +1,9 @@
 package com.urlaunched.android.common.viewmodel
 
-import androidx.lifecycle.ViewModel
 import com.urlaunched.android.common.response.ErrorData
 import com.urlaunched.android.common.response.Response
 
-suspend fun <T : Any> ViewModel.performUseCase(
+suspend fun <T : Any> performUseCase(
     useCase: suspend () -> Response<T>,
     success: suspend (data: T) -> Unit,
     error: suspend (error: ErrorData) -> Unit
@@ -20,7 +19,7 @@ suspend fun <T : Any> ViewModel.performUseCase(
     }
 }
 
-inline fun ViewModel.loadingTask(setLoading: (isLoading: Boolean) -> Unit, block: () -> Unit) {
+inline fun loadingTask(setLoading: (isLoading: Boolean) -> Unit, block: () -> Unit) {
     try {
         setLoading(true)
         block()
