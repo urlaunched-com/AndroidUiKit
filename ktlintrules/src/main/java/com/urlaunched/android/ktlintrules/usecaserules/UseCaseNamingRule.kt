@@ -36,7 +36,7 @@ class UseCaseNamingRule :
     }
 
     companion object {
-        private const val CUSTOM_RULE_ID = "ktlintrules:usecasenamingrule"
+        private const val CUSTOM_RULE_ID = "ktlintrules:usecase-naming-rule"
         private const val USE_CASE_PACKAGE = ".domain.usecases"
         private const val USE_CASE_POSTFIX = "UseCase"
         private const val ERROR_MESSAGE = "Class name '%s' in '%s' should end with 'UseCase'\""

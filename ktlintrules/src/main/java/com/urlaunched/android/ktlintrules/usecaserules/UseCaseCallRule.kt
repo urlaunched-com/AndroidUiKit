@@ -25,12 +25,10 @@ class UseCaseCallRule :
             val parentExpression = callExpression.parent
             if (parentExpression is KtDotQualifiedExpression) {
                 val receiverExpression = parentExpression.receiverExpression as? KtNameReferenceExpression
-                val selectorExpression = parentExpression.selectorExpression
 
                 if (receiverExpression != null) {
                     val receiverName = receiverExpression.getReferencedName()
                     if (receiverName.endsWith(USE_CASE_POSTFIX) &&
-                        selectorExpression == callExpression &&
                         callExpression.calleeExpression?.text == INVOKE
                     ) {
                         emit(
@@ -45,7 +43,7 @@ class UseCaseCallRule :
     }
 
     companion object {
-        private const val CUSTOM_RULE_ID = "ktlintrules:usecasecallrule"
+        private const val CUSTOM_RULE_ID = "ktlintrules:usecase-call-rule"
         private const val ERROR_MESSAGE = "`UseCase` calls should not use `.invoke()`. Use `$%s()` instead."
         private const val USE_CASE_POSTFIX = "UseCase"
         private const val INVOKE = "invoke"

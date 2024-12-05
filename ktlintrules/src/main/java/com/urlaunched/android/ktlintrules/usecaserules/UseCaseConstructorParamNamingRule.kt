@@ -41,7 +41,7 @@ class UseCaseConstructorParamNamingRule :
     }
 
     companion object {
-        private const val CUSTOM_RULE_ID = "ktlintrules:usecaseconstructorrule"
+        private const val CUSTOM_RULE_ID = "ktlintrules:usecase-constructor-rule"
         private const val USE_CASE_POSTFIX = "UseCase"
         private const val ERROR_MESSAGE = "Constructor parameter '%s' should be named '%s' for the use case type '%s'"
     }
