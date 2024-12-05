@@ -55,7 +55,7 @@ class NotLoggableRule :
 
     companion object {
         private val sensitiveParams = listOf(
-            "email", "password", "userName"
+            "email", "password", "phoneNumber", "birthDate", "postIndex"
         )
         private const val USE_CASES_PACKAGE = ".domain.usecases"
         private const val NOT_LOGGABLE_ANNOTATION = "NotLoggable"
