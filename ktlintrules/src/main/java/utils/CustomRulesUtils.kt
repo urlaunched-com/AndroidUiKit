@@ -2,8 +2,11 @@ package utils
 
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
+import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierType
 
@@ -37,4 +40,18 @@ object CustomRulesUtils {
 
     val KtNamedFunction.isComposable: Boolean
         get() = annotationEntries.any { it.calleeExpression?.text == "Composable" }
+
+    fun KtFunction.modifierParameter(): KtParameter? {
+        val modifiers = valueParameters.filter { it.isModifier() }
+        return modifiers.firstOrNull { it.name == "modifier" } ?: modifiers.firstOrNull()
+    }
+
+    private fun KtCallableDeclaration.isModifier(): Boolean =
+        typeReference?.text?.contains("Modifier") ?: false
+
+    fun KtFunction.getPackageName(): String? {
+        val containingFile = this.containingKtFile
+        val packageDirective = containingFile.packageDirective
+        return packageDirective?.fqName?.asString()
+    }
 }

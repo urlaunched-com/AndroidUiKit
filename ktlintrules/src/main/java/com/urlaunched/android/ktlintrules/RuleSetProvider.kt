@@ -19,6 +19,7 @@ class RuleSetProvider : RuleSetProviderV3(RuleSetId(CUSTOM_RULE_SET_ID)) {
         RuleProvider { LocalizableResourcesRule() },
         RuleProvider { UseCaseNamingRule() },
         RuleProvider { UseCaseConstructorParamNamingRule() },
-        RuleProvider { UseCaseCallRule() }
+        RuleProvider { UseCaseCallRule() },
+        RuleProvider { ComposableModifierMissingRule() }
     )
 }
