@@ -33,7 +33,7 @@ class NotLoggableRule :
 
             val hasSensitiveParams = firstMethod.valueParameters.any { argument ->
                 sensitiveParams.any { sensitiveParam ->
-                    argument.text.lowercase().contains(sensitiveParam)
+                    argument.text.lowercase().contains(sensitiveParam.lowercase())
                 }
             }
 
@@ -55,7 +55,7 @@ class NotLoggableRule :
 
     companion object {
         private val sensitiveParams = listOf(
-            "email", "password", "phoneNumber", "birthDate", "postIndex"
+            "email", "password", "phoneNumber", "birthDate", "postIndex", "phone", "birth", "deviceId"
         )
         private const val USE_CASES_PACKAGE = ".domain.usecases"
         private const val NOT_LOGGABLE_ANNOTATION = "NotLoggable"
