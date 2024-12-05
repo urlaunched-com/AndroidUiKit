@@ -71,6 +71,11 @@ fun <T : Any> Response<T>.getOrNull(): T? = if (this is Response.Success) {
     null
 }
 
+inline fun <A : Any, C : Any> Response<A>.flatMap(block: (A) -> Response<C>): Response<C> = when (this) {
+    is Response.Success -> block(this.data)
+    is Response.Error -> this.mapError()
+}
+
 object ErrorCodes {
     const val INVALID_PARAMS = 422
     const val UNKNOWN_ERROR = 1024

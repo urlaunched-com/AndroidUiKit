@@ -109,6 +109,10 @@ package com.urlaunched.android.common.files {
   public static final class TakeCameraPictureContract.Companion {
   }
 
+  public final class UriKt {
+    method public static long length(android.net.Uri, android.content.ContentResolver contentResolver);
+  }
+
 }
 
 package com.urlaunched.android.common.formatters {
@@ -334,6 +338,7 @@ package com.urlaunched.android.common.response {
   }
 
   public final class ResponseKt {
+    method public static inline <A, C> com.urlaunched.android.common.response.Response<C> flatMap(com.urlaunched.android.common.response.Response<A>, kotlin.jvm.functions.Function1<? super A,? extends com.urlaunched.android.common.response.Response<C>> block);
     method public static <T> T? getOrNull(com.urlaunched.android.common.response.Response<T>);
     method public static inline <T, R> com.urlaunched.android.common.response.Response<R> map(com.urlaunched.android.common.response.Response<T>, kotlin.jvm.functions.Function1<? super T,? extends R> convert);
     method public static <T, R> com.urlaunched.android.common.response.Response<R> mapError(com.urlaunched.android.common.response.Response.Error<T>);
