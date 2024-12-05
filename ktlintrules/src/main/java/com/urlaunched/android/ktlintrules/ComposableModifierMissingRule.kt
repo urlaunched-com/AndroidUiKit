@@ -50,9 +50,9 @@ class ComposableModifierMissingRule :
     companion object {
         private const val CUSTOM_RULE_ID = "ktlintrules:composable-modifier-missing-rule"
         private const val MODIFIER_MISSING_ERROR =
-            " This @Composable function emits content but doesn't have a modifier parameter."
+            "This @Composable function emits content but doesn't have a modifier parameter."
         private const val DESIGN_RESOURCES_PACKAGE = "core.designsystem.resources"
-        private val modifierMissingExceptions = listOf("Screen", "Route", "SideEffects")
+        private val modifierMissingExceptions = listOf("Screen", "Route", "SideEffects", "DeepLink")
         private const val MODIFIER_TYPE_REFERENCE = "Modifier"
     }
 }
