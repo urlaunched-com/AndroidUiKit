@@ -98,5 +98,9 @@ package com.urlaunched.android.network.utils {
     method public static suspend <T> Object? executeRequestAndTryGetAuthToken(retrofit2.Response<T>, optional String header, optional kotlin.coroutines.Continuation<? super com.urlaunched.android.common.response.Response<kotlin.Pair<? extends T,? extends com.urlaunched.android.network.utils.AuthTokenWithResponseCode>>>);
   }
 
+  public final class UriKt {
+    method public static okhttp3.RequestBody asRequestBody(android.net.Uri, android.content.ContentResolver contentResolver, optional okhttp3.MediaType? contentType);
+  }
+
 }
 
