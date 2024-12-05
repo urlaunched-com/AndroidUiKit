@@ -13,6 +13,8 @@ class RuleSetProvider : RuleSetProviderV3(RuleSetId(CUSTOM_RULE_SET_ID)) {
     override fun getRuleProviders(): Set<RuleProvider> = setOf(
         RuleProvider { HardcodeValuesRule() },
         RuleProvider { ForbiddenImportsRule() },
+        RuleProvider { ComposableAccessModifiersRule() },
+        RuleProvider { DataAccessModifierRule() },
         RuleProvider { NotLoggableRule() },
         RuleProvider { LocalizableResourcesRule() },
         RuleProvider { UseCaseNamingRule() },
