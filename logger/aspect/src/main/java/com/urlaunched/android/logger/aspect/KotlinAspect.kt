@@ -5,10 +5,14 @@ import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import com.urlaunched.android.common.pagination.PagingFlowWithMeta
 import com.urlaunched.android.common.response.Response
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
@@ -99,18 +103,29 @@ class KotlinAspect {
         } else {
             val result = joinPoint?.proceed(args)
 
-            if (result is Flow<*>) {
-                runBlocking(Dispatchers.IO) {
-                    result.first()?.let { data ->
-                        if (data is PagingData<*>) {
-                            Firebase.crashlytics.log(methodWithParams)
+            when (result) {
+                is Flow<*> -> {
+                    val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+                    scope.launch {
+                        try {
+                            result.first()?.let { data ->
+                                if (data is PagingData<*>) {
+                                    Firebase.crashlytics.log(methodWithParams)
+                                }
+                            }
+                        } finally {
+                            scope.cancel()
                         }
                     }
-                }
-            }
 
-            if (result is PagingFlowWithMeta<*, *>) {
-                Firebase.crashlytics.log(methodWithParams)
+                    scope.coroutineContext[Job]?.invokeOnCompletion {
+                        scope.cancel()
+                    }
+                }
+
+                is PagingFlowWithMeta<*, *> -> {
+                    Firebase.crashlytics.log(methodWithParams)
+                }
             }
 
             return result
