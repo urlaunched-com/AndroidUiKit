@@ -15,6 +15,10 @@ inline fun <T : Any, R : Any> Response<T>.map(convert: (T) -> R): Response<R> = 
         is Response.Success -> Response.Success(convert(data))
     }
 } catch (e: Exception) {
+    if (e is CancellationException) {
+        throw e
+    }
+
     Response.Error(
         ErrorData(
             code = ErrorCodes.UNKNOWN_ERROR,
