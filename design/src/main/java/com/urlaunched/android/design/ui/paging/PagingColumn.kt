@@ -183,7 +183,7 @@ fun <T : Any> PagingColumn(
             verticalArrangement = verticalArrangement,
             horizontalAlignment = horizontalAlignment,
             flingBehavior = flingBehavior,
-            userScrollEnabled = userScrollEnabled
+            userScrollEnabled = userScrollEnabled && !pagingState.isLoading
         ) {
             startItems?.invoke(this, pagingState)
 
