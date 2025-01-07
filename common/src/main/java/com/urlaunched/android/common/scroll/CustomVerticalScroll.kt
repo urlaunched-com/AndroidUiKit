@@ -17,7 +17,7 @@ fun Modifier.customVerticalScroll(state: ScrollState, enabled: Boolean = true): 
     } else {
         verticalScroll(
             state = state,
-            enabled = if (LocalInspectionMode.current) true else enabled
+            enabled = enabled
         )
     }
 }
