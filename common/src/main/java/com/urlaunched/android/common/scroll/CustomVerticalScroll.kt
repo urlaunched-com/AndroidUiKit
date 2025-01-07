@@ -11,8 +11,15 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-fun Modifier.customVerticalScroll(state: ScrollState): Modifier = composed {
-    if (LocalInspectionMode.current) this else verticalScroll(state = state)
+fun Modifier.customVerticalScroll(state: ScrollState, enabled: Boolean = true): Modifier = composed {
+    if (LocalInspectionMode.current) {
+        this
+    } else {
+        verticalScroll(
+            state = state,
+            enabled = if (LocalInspectionMode.current) true else enabled
+        )
+    }
 }
 
 fun Modifier.customFillMaxSize(height: Dp = 1100.dp): Modifier = composed {
