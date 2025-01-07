@@ -223,7 +223,7 @@ fun <T : Any> PagingPullRefreshColumn(
                 verticalArrangement = verticalArrangement,
                 horizontalAlignment = horizontalAlignment,
                 flingBehavior = flingBehavior,
-                userScrollEnabled = userScrollEnabled
+                userScrollEnabled = userScrollEnabled && !pagingState.isLoading
             ) {
                 startItems?.invoke(this, pagingState)
 

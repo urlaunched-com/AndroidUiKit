@@ -195,7 +195,7 @@ fun <T : Any> PagingVerticalGrid(
             verticalArrangement = verticalArrangement,
             horizontalArrangement = horizontalArrangement,
             flingBehavior = flingBehavior,
-            userScrollEnabled = userScrollEnabled
+            userScrollEnabled = userScrollEnabled && !pagingState.isLoading
         ) {
             startItems?.invoke(this, pagingState)
 
