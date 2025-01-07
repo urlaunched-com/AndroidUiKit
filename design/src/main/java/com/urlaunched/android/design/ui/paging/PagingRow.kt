@@ -186,7 +186,7 @@ fun <T : Any> PagingRow(
             horizontalArrangement = horizontalArrangement,
             verticalAlignment = verticalAlignment,
             flingBehavior = flingBehavior,
-            userScrollEnabled = userScrollEnabled
+            userScrollEnabled = userScrollEnabled && !pagingState.isLoading
         ) {
             startItems?.invoke(this, pagingState)
 
