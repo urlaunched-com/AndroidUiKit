@@ -27,8 +27,9 @@ package com.urlaunched.android.tempattachment.data.remote.datasource {
 package com.urlaunched.android.tempattachment.data.repository {
 
   public final class TempAttachmentsRepositoryImpl implements com.urlaunched.android.tempattachment.domain.repository.TempAttachmentsRepository {
-    ctor public TempAttachmentsRepositoryImpl(com.urlaunched.android.tempattachment.data.remote.datasource.TempAttachmentsRemoteDataSource tempAttachmentsRemoteDataSource, okhttp3.OkHttpClient okHttpClient);
+    ctor public TempAttachmentsRepositoryImpl(com.urlaunched.android.tempattachment.data.remote.datasource.TempAttachmentsRemoteDataSource tempAttachmentsRemoteDataSource, okhttp3.OkHttpClient okHttpClient, android.content.Context context);
     method public suspend Object? getPresignedAndPublicUrl(String fileName, boolean isPrivate, kotlin.coroutines.Continuation<? super com.urlaunched.android.common.response.Response<com.urlaunched.android.tempattachment.models.domain.TempAttachmentsDomainModel>>);
+    method public suspend Object? uploadFileToPresignedUrl(com.urlaunched.android.common.files.MediaType mediaType, android.net.Uri uri, String presignedUrl, kotlin.coroutines.Continuation<? super com.urlaunched.android.common.response.Response<kotlin.Unit>>);
     method public suspend Object? uploadFileToPresignedUrl(com.urlaunched.android.common.files.MediaType mediaType, java.io.File file, String presignedUrl, kotlin.coroutines.Continuation<? super com.urlaunched.android.common.response.Response<kotlin.Unit>>);
   }
 
@@ -38,6 +39,7 @@ package com.urlaunched.android.tempattachment.domain.repository {
 
   public interface TempAttachmentsRepository {
     method public suspend Object? getPresignedAndPublicUrl(String fileName, boolean isPrivate, kotlin.coroutines.Continuation<? super com.urlaunched.android.common.response.Response<com.urlaunched.android.tempattachment.models.domain.TempAttachmentsDomainModel>>);
+    method public suspend Object? uploadFileToPresignedUrl(com.urlaunched.android.common.files.MediaType mediaType, android.net.Uri uri, String presignedUrl, kotlin.coroutines.Continuation<? super com.urlaunched.android.common.response.Response<kotlin.Unit>>);
     method public suspend Object? uploadFileToPresignedUrl(com.urlaunched.android.common.files.MediaType mediaType, java.io.File file, String presignedUrl, kotlin.coroutines.Continuation<? super com.urlaunched.android.common.response.Response<kotlin.Unit>>);
   }
 
@@ -58,6 +60,11 @@ package com.urlaunched.android.tempattachment.domain.usecases {
   public final class UploadToPresignedUrlUseCase {
     ctor public UploadToPresignedUrlUseCase(com.urlaunched.android.tempattachment.domain.repository.TempAttachmentsRepository tempAttachmentsRepository);
     method public suspend operator Object? invoke(com.urlaunched.android.common.files.MediaType mediaType, java.io.File file, String presignedUrl, kotlin.coroutines.Continuation<? super com.urlaunched.android.common.response.Response<kotlin.Unit>>);
+  }
+
+  public final class UploadUriAndGetPublicUrlUseCase {
+    ctor public UploadUriAndGetPublicUrlUseCase(com.urlaunched.android.tempattachment.domain.repository.TempAttachmentsRepository tempAttachmentsRepository, android.content.Context context);
+    method public suspend operator Object? invoke(com.urlaunched.android.common.files.MediaType mediaType, android.net.Uri uri, optional boolean isPrivate, optional kotlin.coroutines.Continuation<? super com.urlaunched.android.common.response.Response<java.lang.String>>);
   }
 
 }

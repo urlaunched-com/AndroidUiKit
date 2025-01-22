@@ -1,6 +1,5 @@
 package com.urlaunched.android.network.okhttp
 
-import okhttp3.Dispatcher
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -14,14 +13,10 @@ object OkHttpInitializer {
         okHttpClient: OkHttpClient? = null,
         vararg interceptors: Interceptor
     ): OkHttpClient {
-        val dispatcher = Dispatcher()
-        dispatcher.maxRequests = 1
-
         val builder = (okHttpClient?.newBuilder() ?: OkHttpClient.Builder())
             .callTimeout(DEFAULT_TIMEOUT.toLong(), TimeUnit.SECONDS)
             .readTimeout(DEFAULT_TIMEOUT.toLong(), TimeUnit.SECONDS)
             .writeTimeout(DEFAULT_TIMEOUT.toLong(), TimeUnit.SECONDS)
-            .dispatcher(dispatcher)
             .retryOnConnectionFailure(true)
             .apply {
                 interceptors.forEach {

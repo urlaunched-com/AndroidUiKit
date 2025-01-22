@@ -5,6 +5,7 @@ import com.urlaunched.android.common.response.ErrorCodes
 import com.urlaunched.android.common.response.ErrorData
 import com.urlaunched.android.common.socket.ActionCableSocketEventMessage
 import com.urlaunched.android.common.socket.map
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -44,6 +45,10 @@ suspend fun <T : Any> executeRequestAndGetAuthToken(
 ): CommonResponse<Pair<T, AuthTokenWithResponseCode>> = try {
     request().executeRequestAndTryGetAuthToken()
 } catch (e: Exception) {
+    if (e is CancellationException) {
+        throw e
+    }
+
     createErrorFromException(e)
 }
 
@@ -54,6 +59,10 @@ suspend fun <T : Any> executeRequest(request: suspend () -> Response<T>): Common
         else -> createErrorResponse(response)
     }
 } catch (e: Exception) {
+    if (e is CancellationException) {
+        throw e
+    }
+
     createErrorFromException(e)
 }
 
@@ -65,6 +74,10 @@ suspend fun executeRequestNullable(request: suspend () -> Response<Unit>): Commo
         else -> createErrorResponse(response)
     }
 } catch (e: Exception) {
+    if (e is CancellationException) {
+        throw e
+    }
+
     createErrorFromException(e)
 }
 
@@ -79,6 +92,10 @@ suspend fun executeOkhttpRequest(request: suspend () -> Call): CommonResponse<Un
         CommonResponse.Error(errorData)
     }
 } catch (e: Exception) {
+    if (e is CancellationException) {
+        throw e
+    }
+
     createErrorFromException(e)
 }
 
