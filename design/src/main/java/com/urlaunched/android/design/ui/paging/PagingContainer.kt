@@ -32,52 +32,30 @@ fun <T : Any> PagingContainer(
     showSnackbar: suspend (message: String) -> Unit,
     pagingContent: @Composable (pagingState: PagingState<T>) -> Unit
 ) {
-    val localPagingMode = LocalPagingMode.current
-
     val isLoadingError by remember(pagingItems) {
         derivedStateOf {
-            if (localPagingMode == null) {
-                pagingItems.loadState.refresh is LoadState.Error
-            } else {
-                localPagingMode == LocalPagingModeEnum.ERROR
-            }
+            pagingItems.loadState.refresh is LoadState.Error
         }
     }
 
     val isLoading by remember(pagingItems) {
         derivedStateOf {
-            if (localPagingMode == null) {
-                pagingItems.loadState.refresh is LoadState.Loading && pagingItems.itemSnapshotList.isEmpty()
-            } else {
-                localPagingMode == LocalPagingModeEnum.LOADING
-            }
+            pagingItems.loadState.refresh is LoadState.Loading && pagingItems.itemSnapshotList.isEmpty()
         }
     }
     val isAppendLoading by remember(pagingItems) {
         derivedStateOf {
-            if (localPagingMode == null) {
-                pagingItems.loadState.append is LoadState.Loading
-            } else {
-                localPagingMode == LocalPagingModeEnum.LOADING
-            }
+            pagingItems.loadState.append is LoadState.Loading
         }
     }
     val isAppendError by remember(pagingItems) {
         derivedStateOf {
-            if (localPagingMode == null) {
-                pagingItems.loadState.append is LoadState.Error
-            } else {
-                localPagingMode == LocalPagingModeEnum.ERROR
-            }
+            pagingItems.loadState.append is LoadState.Error
         }
     }
     val isNoItems by remember(pagingItems) {
         derivedStateOf {
-            if (localPagingMode == null) {
-                pagingItems.loadState.refresh is LoadState.NotLoading && pagingItems.loadState.append.endOfPaginationReached && pagingItems.itemSnapshotList.isEmpty()
-            } else {
-                localPagingMode == LocalPagingModeEnum.EMPTY
-            }
+            pagingItems.loadState.refresh is LoadState.NotLoading && pagingItems.loadState.append.endOfPaginationReached && pagingItems.itemSnapshotList.isEmpty()
         }
     }
 
