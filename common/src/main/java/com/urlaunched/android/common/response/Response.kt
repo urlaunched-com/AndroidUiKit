@@ -15,6 +15,10 @@ inline fun <T : Any, R : Any> Response<T>.map(convert: (T) -> R): Response<R> = 
         is Response.Success -> Response.Success(convert(data))
     }
 } catch (e: Exception) {
+    if (e is CancellationException) {
+        throw e
+    }
+
     Response.Error(
         ErrorData(
             code = ErrorCodes.UNKNOWN_ERROR,
@@ -69,6 +73,11 @@ fun <T : Any> Response<T>.getOrNull(): T? = if (this is Response.Success) {
     this.data
 } else {
     null
+}
+
+inline fun <A : Any, C : Any> Response<A>.flatMap(block: (A) -> Response<C>): Response<C> = when (this) {
+    is Response.Success -> block(this.data)
+    is Response.Error -> this.mapError()
 }
 
 object ErrorCodes {

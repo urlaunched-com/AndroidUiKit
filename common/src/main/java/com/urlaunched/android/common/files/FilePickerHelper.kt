@@ -40,21 +40,19 @@ object FilePickerHelper {
     fun getMediaDuration(file: File): Duration? {
         val retriever = MediaMetadataRetriever()
 
-        try {
+        return try {
             retriever.setDataSource(file.absolutePath)
 
             val durationStr =
                 retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
             val durationInMillis = durationStr?.toLongOrNull()
 
-            if (durationInMillis != null) {
-                return durationInMillis.milliseconds
-            }
+            durationInMillis?.milliseconds
+        } catch (exception: Exception) {
+            null
         } finally {
             retriever.release()
         }
-
-        return null
     }
 
     fun createFileFromUri(context: Context, uri: Uri): File? {

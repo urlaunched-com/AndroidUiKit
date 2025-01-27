@@ -82,7 +82,4 @@ dependencies {
     // Tests
     implementation libs.testDependencies.junit
     implementation libs.paparazi.core
-
-    // Local modules
-    implementation project(":design")
 }

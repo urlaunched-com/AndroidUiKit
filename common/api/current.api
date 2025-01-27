@@ -109,6 +109,10 @@ package com.urlaunched.android.common.files {
   public static final class TakeCameraPictureContract.Companion {
   }
 
+  public final class UriKt {
+    method public static long length(android.net.Uri, android.content.ContentResolver contentResolver);
+  }
+
 }
 
 package com.urlaunched.android.common.formatters {
@@ -334,6 +338,7 @@ package com.urlaunched.android.common.response {
   }
 
   public final class ResponseKt {
+    method public static inline <A, C> com.urlaunched.android.common.response.Response<C> flatMap(com.urlaunched.android.common.response.Response<A>, kotlin.jvm.functions.Function1<? super A,? extends com.urlaunched.android.common.response.Response<C>> block);
     method public static <T> T? getOrNull(com.urlaunched.android.common.response.Response<T>);
     method public static inline <T, R> com.urlaunched.android.common.response.Response<R> map(com.urlaunched.android.common.response.Response<T>, kotlin.jvm.functions.Function1<? super T,? extends R> convert);
     method public static <T, R> com.urlaunched.android.common.response.Response<R> mapError(com.urlaunched.android.common.response.Response.Error<T>);
@@ -349,7 +354,7 @@ package com.urlaunched.android.common.scroll {
   public final class CustomVerticalScrollKt {
     method public static androidx.compose.ui.Modifier customFillMaxSize(androidx.compose.ui.Modifier, optional float height);
     method public static androidx.compose.ui.Modifier customHeight(androidx.compose.ui.Modifier, androidx.compose.ui.Modifier modifier);
-    method public static androidx.compose.ui.Modifier customVerticalScroll(androidx.compose.ui.Modifier, androidx.compose.foundation.ScrollState state);
+    method public static androidx.compose.ui.Modifier customVerticalScroll(androidx.compose.ui.Modifier, androidx.compose.foundation.ScrollState state, optional boolean enabled);
   }
 
 }
@@ -431,8 +436,8 @@ package com.urlaunched.android.common.string {
 package com.urlaunched.android.common.viewmodel {
 
   public final class ViewModelExtensionsKt {
-    method public static inline void loadingTask(androidx.lifecycle.ViewModel, kotlin.jvm.functions.Function1<? super java.lang.Boolean,kotlin.Unit> setLoading, kotlin.jvm.functions.Function0<kotlin.Unit> block);
-    method public static suspend <T> Object? performUseCase(androidx.lifecycle.ViewModel, kotlin.jvm.functions.Function1<? super kotlin.coroutines.Continuation<? super com.urlaunched.android.common.response.Response<T>>,?> useCase, kotlin.jvm.functions.Function2<? super T,? super kotlin.coroutines.Continuation<? super kotlin.Unit>,?> success, kotlin.jvm.functions.Function2<? super com.urlaunched.android.common.response.ErrorData,? super kotlin.coroutines.Continuation<? super kotlin.Unit>,?> error, kotlin.coroutines.Continuation<? super kotlin.Unit>);
+    method public static inline void loadingTask(kotlin.jvm.functions.Function1<? super java.lang.Boolean,kotlin.Unit> setLoading, kotlin.jvm.functions.Function0<kotlin.Unit> block);
+    method public static suspend <T> Object? performUseCase(kotlin.jvm.functions.Function1<? super kotlin.coroutines.Continuation<? super com.urlaunched.android.common.response.Response<T>>,?> useCase, kotlin.jvm.functions.Function2<? super T,? super kotlin.coroutines.Continuation<? super kotlin.Unit>,?> success, kotlin.jvm.functions.Function2<? super com.urlaunched.android.common.response.ErrorData,? super kotlin.coroutines.Continuation<? super kotlin.Unit>,?> error, kotlin.coroutines.Continuation<? super kotlin.Unit>);
   }
 
 }
