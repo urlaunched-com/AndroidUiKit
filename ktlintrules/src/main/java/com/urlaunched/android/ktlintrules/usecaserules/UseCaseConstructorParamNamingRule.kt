@@ -4,9 +4,11 @@ import com.pinterest.ktlint.rule.engine.core.api.AutocorrectDecision
 import com.pinterest.ktlint.rule.engine.core.api.ElementType
 import com.pinterest.ktlint.rule.engine.core.api.RuleAutocorrectApproveHandler
 import com.pinterest.ktlint.rule.engine.core.api.RuleId
+import com.urlaunched.android.ktlintrules.usecaserules.UseCaseCallRule.Companion
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
+import utils.createMessage
 
 class UseCaseConstructorParamNamingRule :
     com.pinterest.ktlint.rule.engine.core.api.Rule(
@@ -31,7 +33,10 @@ class UseCaseConstructorParamNamingRule :
                     if (paramName != expectedParamName) {
                         emit(
                             param.startOffset,
-                            ERROR_MESSAGE.format(paramName, expectedParamName, paramType),
+                            createMessage(
+                                text = ERROR_MESSAGE.format(paramName, expectedParamName, paramType),
+                                ruleId = CUSTOM_RULE_ID
+                            ),
                             false
                         )
                     }

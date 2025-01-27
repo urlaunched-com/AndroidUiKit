@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import utils.createMessage
 
 class UseCaseCallRule :
     Rule(
@@ -33,7 +34,10 @@ class UseCaseCallRule :
                     ) {
                         emit(
                             node.startOffset,
-                            ERROR_MESSAGE.format(receiverName),
+                            createMessage(
+                                text = ERROR_MESSAGE.format(receiverName),
+                                ruleId = CUSTOM_RULE_ID
+                            ),
                             false
                         )
                     }

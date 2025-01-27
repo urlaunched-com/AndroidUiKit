@@ -5,8 +5,10 @@ import com.pinterest.ktlint.rule.engine.core.api.AutocorrectDecision
 import com.pinterest.ktlint.rule.engine.core.api.Rule
 import com.pinterest.ktlint.rule.engine.core.api.RuleAutocorrectApproveHandler
 import com.pinterest.ktlint.rule.engine.core.api.RuleId
+import com.urlaunched.android.ktlintrules.usecaserules.UseCaseConstructorParamNamingRule.Companion
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.psi.KtClass
+import utils.createMessage
 
 class UseCaseNamingRule :
     Rule(
@@ -27,7 +29,10 @@ class UseCaseNamingRule :
                 if (!className.endsWith(USE_CASE_POSTFIX)) {
                     emit(
                         node.startOffset,
-                        ERROR_MESSAGE.format(className, packageName),
+                        createMessage(
+                            text = ERROR_MESSAGE.format(className, packageName),
+                            ruleId = CUSTOM_RULE_ID
+                        ),
                         false
                     )
                 }

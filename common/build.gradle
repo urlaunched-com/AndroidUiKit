@@ -109,4 +109,7 @@ dependencies {
 
     // Kotlin reflect
     implementation libs.kotlin.reflect
+
+    // Ktlint
+    implementation project(":ktlintrules")
 }
