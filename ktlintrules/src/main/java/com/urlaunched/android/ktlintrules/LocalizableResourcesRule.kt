@@ -6,6 +6,7 @@ import com.pinterest.ktlint.rule.engine.core.api.Rule
 import com.pinterest.ktlint.rule.engine.core.api.RuleAutocorrectApproveHandler
 import com.pinterest.ktlint.rule.engine.core.api.RuleId
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
+import utils.createMessage
 
 class LocalizableResourcesRule :
     Rule(
@@ -21,12 +22,13 @@ class LocalizableResourcesRule :
             val importStatements = node.text.split("\n").filter { it.isNotBlank() }
 
             importStatements.forEach { import ->
-                if (import.contains(LOCALIZATION_IMPORT) &&
-                    !import.contains(CORRECT_IMPORT)
-                ) {
+                if (import.contains(LOCALIZATION_IMPORT) && !import.contains(CORRECT_CAST)) {
                     emit(
                         node.startOffset,
-                        ERROR_MESSAGE,
+                        createMessage(
+                            text = ERROR_MESSAGE,
+                            ruleId = CUSTOM_RULE_ID
+                        ),
                         false
                     )
                 }
@@ -37,8 +39,8 @@ class LocalizableResourcesRule :
     companion object {
         private const val CUSTOM_RULE_ID = "ktlintrules:localizableresourses"
         private const val LOCALIZATION_IMPORT = "core.localization.R"
-        private const val CORRECT_IMPORT = "core.localization.LocalizableResources"
+        private const val CORRECT_CAST = "as LocalizableResources"
         private const val ERROR_MESSAGE =
-            "The import for localization resources must be import as ...core.localization.LocalizableResources"
+            "The import for localization R must be aliased as LocalizableResources. Example: import ...core.localization.R as LocalizableResources"
     }
 }

@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
-import utils.CustomRulesUtils.isInternal
+import utils.createMessage
 
 class DataAccessModifierRule :
     Rule(
@@ -33,7 +33,10 @@ class DataAccessModifierRule :
             if (clazz.isPublic) {
                 emit(
                     node.startOffset,
-                    DATA_ACCESS_ERROR,
+                    createMessage(
+                        text = DATA_ACCESS_ERROR,
+                        ruleId = CUSTOM_RULE_ID
+                    ),
                     false
                 )
             }

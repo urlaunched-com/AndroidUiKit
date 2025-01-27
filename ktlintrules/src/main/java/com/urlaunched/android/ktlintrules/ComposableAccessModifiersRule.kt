@@ -11,6 +11,7 @@ import utils.CustomRulesUtils.isComposable
 import utils.CustomRulesUtils.isPreview
 import utils.CustomRulesUtils.isPrivate
 import utils.CustomRulesUtils.isPublic
+import utils.createMessage
 
 class ComposableAccessModifiersRule :
     Rule(
@@ -34,9 +35,13 @@ class ComposableAccessModifiersRule :
             when {
                 function.isPreview -> {
                     if (!function.isPrivate) {
+
                         emit(
                             node.startOffset,
-                            PREVIEW_ERROR_MESSAGE,
+                            createMessage(
+                                text = PREVIEW_ERROR_MESSAGE,
+                                ruleId = CUSTOM_RULE_ID
+                            ),
                             false
                         )
                     }
@@ -46,7 +51,10 @@ class ComposableAccessModifiersRule :
                     if (function.isPublic && function.name?.contains(SCREEN_POSTFIX) == false) {
                         emit(
                             node.startOffset,
-                            COMPOSABLE_ACCESS_MODIFIER_ERROR_MESSAGE,
+                            createMessage(
+                                text = COMPOSABLE_ACCESS_MODIFIER_ERROR_MESSAGE,
+                                ruleId = CUSTOM_RULE_ID
+                            ),
                             false
                         )
                     }
