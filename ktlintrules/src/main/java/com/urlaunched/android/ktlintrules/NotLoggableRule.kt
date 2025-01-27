@@ -5,9 +5,11 @@ import com.pinterest.ktlint.rule.engine.core.api.ElementType
 import com.pinterest.ktlint.rule.engine.core.api.Rule
 import com.pinterest.ktlint.rule.engine.core.api.RuleAutocorrectApproveHandler
 import com.pinterest.ktlint.rule.engine.core.api.RuleId
+import com.urlaunched.android.ktlintrules.LocalizableResourcesRule.Companion
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import utils.createMessage
 
 class NotLoggableRule :
     Rule(
@@ -46,7 +48,10 @@ class NotLoggableRule :
             if (!hasNotLoggableAnnotation) {
                 emit(
                     node.startOffset,
-                    ERROR_MESSAGE,
+                    createMessage(
+                        text = ERROR_MESSAGE,
+                        ruleId = CUSTOM_RULE_ID
+                    ),
                     false
                 )
             }

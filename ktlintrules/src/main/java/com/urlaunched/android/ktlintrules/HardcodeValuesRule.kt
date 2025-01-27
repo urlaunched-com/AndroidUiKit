@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import utils.createMessage
 
 class HardcodeValuesRule :
     Rule(
@@ -32,7 +33,10 @@ class HardcodeValuesRule :
                         if (isHardcodedValue(argumentExpression?.text)) {
                             emit(
                                 argument.node.startOffset,
-                                ERROR_MESSAGE_TEXT.format(argumentExpression?.text),
+                                createMessage(
+                                    text = ERROR_MESSAGE_TEXT.format(argumentExpression?.text),
+                                    ruleId = CUSTOM_RULE_ID
+                                ),
                                 false
                             )
                         }
@@ -48,7 +52,10 @@ class HardcodeValuesRule :
                     if (isHardcodedValue(property.initializer?.text)) {
                         emit(
                             property.node.startOffset,
-                            ERROR_MESSAGE_TEXT.format(property.initializer?.text),
+                            createMessage(
+                                text = ERROR_MESSAGE_TEXT.format(property.initializer?.text),
+                                ruleId = CUSTOM_RULE_ID
+                            ),
                             false
                         )
                     }
@@ -70,7 +77,9 @@ class HardcodeValuesRule :
 
     private fun isHardcodedValue(value: String?): Boolean {
         if (value.isNullOrEmpty()) return false
-        if (value.contains(Regex("\\$\\{.*?}"))) return false
+        if (value.contains(Regex("\\$\\{.*?}")) || value.contains(Regex("\\$[a-zA-Z_][a-zA-Z0-9_]*"))) {
+            return false
+        }
         return value.matches(Regex("\".*\"|\\d+(\\.\\d+)?\\.(dp|px)"))
     }
 

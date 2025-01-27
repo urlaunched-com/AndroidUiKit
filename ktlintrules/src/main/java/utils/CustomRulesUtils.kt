@@ -54,4 +54,7 @@ object CustomRulesUtils {
         val packageDirective = containingFile.packageDirective
         return packageDirective?.fqName?.asString()
     }
+
+    val KtFunction.returnsValue: Boolean
+        get() = typeReference != null && typeReference!!.text != "Unit"
 }

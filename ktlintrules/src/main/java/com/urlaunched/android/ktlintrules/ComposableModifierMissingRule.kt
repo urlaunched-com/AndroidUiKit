@@ -11,6 +11,8 @@ import utils.CustomRulesUtils.getPackageName
 import utils.CustomRulesUtils.isComposable
 import utils.CustomRulesUtils.isPreview
 import utils.CustomRulesUtils.modifierParameter
+import utils.CustomRulesUtils.returnsValue
+import utils.createMessage
 
 class ComposableModifierMissingRule :
     Rule(
@@ -25,6 +27,7 @@ class ComposableModifierMissingRule :
         if (node.elementType == ElementType.FUN) {
             val function = node.psi as? KtNamedFunction ?: return
             if (!function.isComposable ||
+                function.returnsValue ||
                 function.isPreview ||
                 function.receiverTypeReference?.text == MODIFIER_TYPE_REFERENCE ||
                 function.getPackageName()?.contains(DESIGN_RESOURCES_PACKAGE) == true ||
@@ -39,7 +42,10 @@ class ComposableModifierMissingRule :
                 } else {
                     emit(
                         node.startOffset,
-                        MODIFIER_MISSING_ERROR,
+                        createMessage(
+                            text = MODIFIER_MISSING_ERROR,
+                            ruleId = CUSTOM_RULE_ID
+                        ),
                         false
                     )
                 }
@@ -52,7 +58,7 @@ class ComposableModifierMissingRule :
         private const val MODIFIER_MISSING_ERROR =
             "This @Composable function emits content but doesn't have a modifier parameter."
         private const val DESIGN_RESOURCES_PACKAGE = "core.designsystem.resources"
-        private val modifierMissingExceptions = listOf("Screen", "Route", "SideEffects", "DeepLink")
+        private val modifierMissingExceptions = listOf("Screen", "Route", "SideEffects", "DeepLink", "remember", "Theme")
         private const val MODIFIER_TYPE_REFERENCE = "Modifier"
     }
 }
