@@ -1,6 +1,5 @@
 package utils
 
-
 fun createMessage(text: String, ruleId: String) = "$text\n${DISABLE_RULE_TEXT.format(ruleId)}"
 
 private const val KTLINT_PREFIX = "ktlint:"
