@@ -108,7 +108,7 @@ object DateTimeFormatter {
     fun LocalDateTime.toMillisUtc() = this.toInstant(ZoneOffset.UTC).toEpochMilli()
 
     const val DATE_TIME_PRESENTATION_VALUE_24_H = "yyyy-MM-dd HH:mm:ss"
-    const val DATE_TIME_PRESENTATION_VALUE_12_H = "yyyy-MM-dd HH:mm:ss a"
+    const val DATE_TIME_PRESENTATION_VALUE_12_H = "yyyy-MM-dd hh:mm:ss a"
     const val DATE_PRESENTATION_VALUE = "dd/MM/yyyy"
     const val DATE_PLACEHOLDER = "—"
 }
